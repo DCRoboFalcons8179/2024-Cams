@@ -53,7 +53,6 @@ public final class Main {
   public static List<CameraConfig> cameraConfigs = new ArrayList<>();
   public static List<SwitchedCameraConfig> switchedCameraConfigs = new ArrayList<>();
   public static List<VideoSource> cameras = new ArrayList<>();
-  
 
   private Main() {
   }
@@ -276,7 +275,7 @@ public final class Main {
     }
   }
 
-  public static void main(String... args) {
+  public static void main(String... args) throws IOException {
     if (args.length > 0) {
       configFile = args[0];
     }
@@ -306,9 +305,47 @@ public final class Main {
 
     var test = SmartDashboard.getBoolean(configFile, server);
 
+    String command;
+
+    Process process;
+
     // loop forever
     for (;;) {
       try {
+
+        double leftCam = SmartDashboard.getNumber("Left Camera Value", 0);
+
+        int leftCamInt = (int) leftCam;
+
+        System.out.println(leftCamInt);
+
+        switch (leftCamInt) {
+          case 1:
+            // String command = "touch /home/pi/cam1.txt";
+            command = "link -s /dev/video0 /dev/LeftCam";
+            process = Runtime.getRuntime().exec(command);
+
+            process.getOutputStream();
+            process.getInputStream();
+            process.getErrorStream();
+            break;
+          case 2:
+            command = "link -s /dev/video2 /dev/LeftCam";
+            process = Runtime.getRuntime().exec(command);
+
+            process.getOutputStream();
+            process.getInputStream();
+            process.getErrorStream();
+            break;
+          case 3:
+            command = "link -s /dev/video4 /dev/LeftCam";
+            process = Runtime.getRuntime().exec(command);
+
+            process.getOutputStream();
+            process.getInputStream();
+            process.getErrorStream();
+            break;
+        }
 
         Thread.sleep(500);
       } catch (InterruptedException ex) {
