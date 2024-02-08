@@ -17,7 +17,7 @@
 @if "%DEBUG%"=="" @echo off
 @rem ##########################################################################
 @rem
-@rem  2024-Cams startup script for Windows
+@rem  java-multiCameraServer startup script for Windows
 @rem
 @rem ##########################################################################
 
@@ -32,7 +32,7 @@ set APP_HOME=%DIRNAME%..
 @rem Resolve any "." and ".." in APP_HOME to make it shorter.
 for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 
-@rem Add default JVM options here. You can also use JAVA_OPTS and 2024_CAMS_OPTS to pass JVM options to this script.
+@rem Add default JVM options here. You can also use JAVA_OPTS and JAVA_MULTI_CAMERA_SERVER_OPTS to pass JVM options to this script.
 set DEFAULT_JVM_OPTS=
 
 @rem Find java.exe
@@ -67,22 +67,22 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\2024-Cams.jar;%APP_HOME%\lib\apriltag.jar;%APP_HOME%\lib\wpimath.jar;%APP_HOME%\lib\wpinet.jar;%APP_HOME%\lib\wpiutil.jar;%APP_HOME%\lib\ntcore.jar;%APP_HOME%\lib\cscore.jar;%APP_HOME%\lib\cameraserver.jar;%APP_HOME%\lib\opencv-460.jar;%APP_HOME%\lib\wpilibj.jar;%APP_HOME%\lib\wpiHal.jar;%APP_HOME%\lib\gson-2.8.5.jar
+set CLASSPATH=%APP_HOME%\lib\java-multiCameraServer.jar;%APP_HOME%\lib\apriltag.jar;%APP_HOME%\lib\wpimath.jar;%APP_HOME%\lib\wpinet.jar;%APP_HOME%\lib\wpiutil.jar;%APP_HOME%\lib\ntcore.jar;%APP_HOME%\lib\cscore.jar;%APP_HOME%\lib\cameraserver.jar;%APP_HOME%\lib\opencv-460.jar;%APP_HOME%\lib\wpilibj.jar;%APP_HOME%\lib\wpiHal.jar;%APP_HOME%\lib\gson-2.8.5.jar
 
 
-@rem Execute 2024-Cams
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %2024_CAMS_OPTS%  -classpath "%CLASSPATH%" Main %*
+@rem Execute java-multiCameraServer
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %JAVA_MULTI_CAMERA_SERVER_OPTS%  -classpath "%CLASSPATH%" Main %*
 
 :end
 @rem End local scope for the variables with windows NT shell
 if %ERRORLEVEL% equ 0 goto mainEnd
 
 :fail
-rem Set variable 2024_CAMS_EXIT_CONSOLE if you need the _script_ return code instead of
+rem Set variable JAVA_MULTI_CAMERA_SERVER_EXIT_CONSOLE if you need the _script_ return code instead of
 rem the _cmd.exe /c_ return code!
 set EXIT_CODE=%ERRORLEVEL%
 if %EXIT_CODE% equ 0 set EXIT_CODE=1
-if not ""=="%2024_CAMS_EXIT_CONSOLE%" exit %EXIT_CODE%
+if not ""=="%JAVA_MULTI_CAMERA_SERVER_EXIT_CONSOLE%" exit %EXIT_CODE%
 exit /b %EXIT_CODE%
 
 :mainEnd

@@ -18,7 +18,7 @@
 
 ##############################################################################
 ##
-##  2024-Cams start up script for UN*X
+##  java-multiCameraServer start up script for UN*X
 ##
 ##############################################################################
 
@@ -40,10 +40,10 @@ cd "`dirname \"$PRG\"`/.." >/dev/null
 APP_HOME="`pwd -P`"
 cd "$SAVED" >/dev/null
 
-APP_NAME="2024-Cams"
+APP_NAME="java-multiCameraServer"
 APP_BASE_NAME=`basename "$0"`
 
-# Add default JVM options here. You can also use JAVA_OPTS and 2024_CAMS_OPTS to pass JVM options to this script.
+# Add default JVM options here. You can also use JAVA_OPTS and JAVA_MULTI_CAMERA_SERVER_OPTS to pass JVM options to this script.
 DEFAULT_JVM_OPTS=""
 
 # Use the maximum available, or set MAX_FD != -1 to use that value.
@@ -80,7 +80,7 @@ case "`uname`" in
     ;;
 esac
 
-CLASSPATH=$APP_HOME/lib/2024-Cams-all.jar
+CLASSPATH=$APP_HOME/lib/java-multiCameraServer-all.jar
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then
@@ -178,6 +178,6 @@ save () {
 APP_ARGS=`save "$@"`
 
 # Collect all arguments for the java command, following the shell quoting and substitution rules
-eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $2024_CAMS_OPTS -jar "\"$CLASSPATH\"" "$APP_ARGS"
+eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $JAVA_MULTI_CAMERA_SERVER_OPTS -jar "\"$CLASSPATH\"" "$APP_ARGS"
 
 exec "$JAVACMD" "$@"

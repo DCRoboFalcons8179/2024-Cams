@@ -2,6 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,11 +20,11 @@ import com.google.gson.JsonParser;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.RuntimeDetector;
 import edu.wpi.first.vision.VisionPipeline;
 import edu.wpi.first.vision.VisionThread;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -245,8 +246,6 @@ public final class Main {
     return server;
   }
 
-  private static final VideoMode VIDEO_MODE = new VideoMode(VideoMode.PixelFormat.kMJPEG, 280, 210, 11);
-
   /**
    * Example pipeline.
    */
@@ -262,20 +261,7 @@ public final class Main {
   /**
    * Main.
    */
-
-  private static void setupCamera(UsbCamera camera) {
-    camera.setConnectVerbose(0); // so it doesn't spam the console with annoying messages if it's disconnected
-    if (camera.isConnected()) {
-      final double ratio = camera.getVideoMode().height / (double) camera.getVideoMode().width;
-      camera.setVideoMode(VIDEO_MODE.pixelFormat, VIDEO_MODE.width, (int) (VIDEO_MODE.width * ratio), VIDEO_MODE.fps);
-      camera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-    } else {
-      System.err.println("One of the cameras isn't plugged in. Not initializing");
-      camera.close();
-    }
-  }
-
-  public static void main(String... args) throws IOException {
+  public static void main(String... args) {
     if (args.length > 0) {
       configFile = args[0];
     }
@@ -303,49 +289,66 @@ public final class Main {
       System.out.println("Added Camera" + cameras.size());
     }
 
-    var test = SmartDashboard.getBoolean(configFile, server);
-
-    String command;
-
-    Process process;
+    boolean leftCam0 = false;
+    boolean leftCam1 = false;
+    boolean leftCam2 = false;
 
     // loop forever
     for (;;) {
       try {
 
-        double leftCam = SmartDashboard.getNumber("Left Camera Value", 0);
+        // Specifies the key to get the data from and the defualt value is no value is
+        // found
+        double leftCamDouble = SmartDashboard.getNumber("Left Camera Value", 0);
 
-        int leftCamInt = (int) leftCam;
+        int leftCam = (int) leftCamDouble;
 
-        System.out.println(leftCamInt);
-
-        switch (leftCamInt) {
+        switch (leftCam) {
+          case 0:
+            if (!leftCam0) {
+              try {
+                Runtime.getRuntime().exec("sudo rm /dev/leftCam");
+                Runtime.getRuntime().exec("sudo link /dev/video0 /dev/leftCam");
+              } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+              }
+              leftCam0 = true;
+              leftCam1 = false;
+              leftCam2 = false;
+            }
+            break;
           case 1:
-            // String command = "touch /home/pi/cam1.txt";
-            command = "link -s /dev/video0 /dev/LeftCam";
-            process = Runtime.getRuntime().exec(command);
-
-            process.getOutputStream();
-            process.getInputStream();
-            process.getErrorStream();
+            if (!leftCam1) {
+              try {
+                Runtime.getRuntime().exec("sudo rm /dev/leftCam");
+                Runtime.getRuntime().exec("sudo link /dev/video2 /dev/leftCam");
+              } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+              }
+              leftCam0 = false;
+              leftCam1 = true;
+              leftCam2 = false;
+            }
             break;
           case 2:
-            command = "link -s /dev/video2 /dev/LeftCam";
-            process = Runtime.getRuntime().exec(command);
-
-            process.getOutputStream();
-            process.getInputStream();
-            process.getErrorStream();
-            break;
-          case 3:
-            command = "link -s /dev/video4 /dev/LeftCam";
-            process = Runtime.getRuntime().exec(command);
-
-            process.getOutputStream();
-            process.getInputStream();
-            process.getErrorStream();
+            if (!leftCam2) {
+              try {
+                Runtime.getRuntime().exec("sudo rm /dev/leftCam");
+                Runtime.getRuntime().exec("sudo link /dev/video4 /dev/leftCam");
+              } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+              }
+              leftCam0 = false;
+              leftCam1 = false;
+              leftCam2 = true;
+            }
             break;
         }
+
+        System.out.println(leftCam);
 
         Thread.sleep(500);
       } catch (InterruptedException ex) {
