@@ -307,8 +307,7 @@ public final class Main {
           case 0:
             if (!leftCam0) {
               try {
-                Runtime.getRuntime().exec("sudo rm /dev/leftCam");
-                Runtime.getRuntime().exec("sudo link /dev/video0 /dev/leftCam");
+                Runtime.getRuntime().exec("sudo rm /dev/leftCam && sudo link /dev/video0 /dev/leftCam");
               } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -321,8 +320,7 @@ public final class Main {
           case 1:
             if (!leftCam1) {
               try {
-                Runtime.getRuntime().exec("sudo rm /dev/leftCam");
-                Runtime.getRuntime().exec("sudo link /dev/video2 /dev/leftCam");
+                Runtime.getRuntime().exec("sudo rm /dev/leftCam && sudo link /dev/video2 /dev/leftCam");
               } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -335,8 +333,7 @@ public final class Main {
           case 2:
             if (!leftCam2) {
               try {
-                Runtime.getRuntime().exec("sudo rm /dev/leftCam");
-                Runtime.getRuntime().exec("sudo link /dev/video4 /dev/leftCam");
+                Runtime.getRuntime().exec("sudo rm /dev/leftCam && sudo link /dev/video4 /dev/leftCam");
               } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
