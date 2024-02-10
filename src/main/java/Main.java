@@ -56,6 +56,14 @@ public final class Main {
   public static List<VideoSource> cameras = new ArrayList<>();
 
   private Main() {
+
+    try {
+      Runtime.getRuntime().exec("rw");
+      Runtime.getRuntime().exec("~/clearLinks.txt");
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -92,7 +100,9 @@ public final class Main {
 
     cam.config = config;
 
-    cameraConfigs.add(cam);
+    if (cam.name != "Bad Cam") {
+      cameraConfigs.add(cam);
+    }
     return true;
   }
 
@@ -193,6 +203,9 @@ public final class Main {
    */
   public static VideoSource startCamera(CameraConfig config) {
     System.out.println("Starting camera '" + config.name + "' on " + config.path);
+    if (config.path == "") {
+      return null;
+    }
     UsbCamera camera = new UsbCamera(config.name, config.path);
     MjpegServer server = CameraServer.startAutomaticCapture(camera);
 
@@ -285,71 +298,51 @@ public final class Main {
 
     // start cameras
     for (CameraConfig config : cameraConfigs) {
-      cameras.add(startCamera(config));
+      var camera = startCamera(config);
+
+      if (camera != null) {
+        cameras.add(camera);
+      }
+
       System.out.println("Added Camera" + cameras.size());
     }
 
-    boolean leftCam0 = false;
-    boolean leftCam1 = false;
-    boolean leftCam2 = false;
+    final int DEF_LEFT = 0;
+    final int DEF_RIGHT = 1;
 
+    int currentLeftCam = DEF_LEFT;
+    int currentRightCam = DEF_RIGHT;
     // loop forever
     for (;;) {
       try {
+        double targetLeftCam = SmartDashboard.getNumber("Left Cam Value", DEF_LEFT);
+        double targetRightCam = SmartDashboard.getNumber("Right Cam Value", DEF_RIGHT);
 
-        // Specifies the key to get the data from and the defualt value is no value is
-        // found
-        double leftCamDouble = SmartDashboard.getNumber("Left Camera Value", 0);
+        if (targetLeftCam == targetRightCam)
+          continue;
 
-        int leftCam = (int) leftCamDouble;
-
-        switch (leftCam) {
-          case 0:
-            if (!leftCam0) {
-              try {
-                Runtime.getRuntime().exec("sudo rm /dev/leftCam && sudo link /dev/video0 /dev/leftCam");
-              } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-              }
-              leftCam0 = true;
-              leftCam1 = false;
-              leftCam2 = false;
-            }
-            break;
-          case 1:
-            if (!leftCam1) {
-              try {
-                Runtime.getRuntime().exec("sudo rm /dev/leftCam && sudo link /dev/video2 /dev/leftCam");
-              } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-              }
-              leftCam0 = false;
-              leftCam1 = true;
-              leftCam2 = false;
-            }
-            break;
-          case 2:
-            if (!leftCam2) {
-              try {
-                Runtime.getRuntime().exec("sudo rm /dev/leftCam && sudo link /dev/video4 /dev/leftCam");
-              } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-              }
-              leftCam0 = false;
-              leftCam1 = false;
-              leftCam2 = true;
-            }
-            break;
+        if (targetLeftCam != currentLeftCam) {
+          String cmd = "sudo link /dev/video" + (int) targetLeftCam * 2 + " /dev/leftCam";
+          System.out.println(cmd);
+          Runtime.getRuntime().exec("sudo rm /dev/leftCam");
+          Runtime.getRuntime().exec(cmd);
+          currentLeftCam = (int) targetLeftCam;
         }
 
-        System.out.println(leftCam);
+        if (targetRightCam != currentRightCam) {
+          String cmd = "sudo link /dev/video" + (int) targetRightCam * 2 + " /dev/rightCam";
+          System.out.println(cmd);
+          Runtime.getRuntime().exec("sudo rm /dev/rightCam");
+          Runtime.getRuntime().exec(cmd);
+          currentRightCam = (int) targetRightCam;
+        }
 
         Thread.sleep(500);
       } catch (InterruptedException ex) {
         return;
+      } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
       }
     }
   }
