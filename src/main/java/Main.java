@@ -59,7 +59,6 @@ public final class Main {
 
     try {
       Runtime.getRuntime().exec("rw");
-      Runtime.getRuntime().exec("~/clearLinks.txt");
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -100,7 +99,7 @@ public final class Main {
 
     cam.config = config;
 
-    if (cam.name != "Bad Cam") {
+    if (cam.name != "BadCam") {
       cameraConfigs.add(cam);
     }
     return true;
@@ -307,20 +306,27 @@ public final class Main {
       System.out.println("Added Camera" + cameras.size());
     }
 
+    // Sets the defualt values for left and right cams
     final int DEF_LEFT = 0;
     final int DEF_RIGHT = 1;
 
+    // Sets the currents cams to have a value of the defualt cams value for each
+    // respective side
     int currentLeftCam = DEF_LEFT;
     int currentRightCam = DEF_RIGHT;
     // loop forever
     for (;;) {
       try {
+        // Pulls the data from shuffleboard if it can't find the value defualts to the
+        // defualt value
         double targetLeftCam = SmartDashboard.getNumber("Left Cam Value", DEF_LEFT);
         double targetRightCam = SmartDashboard.getNumber("Right Cam Value", DEF_RIGHT);
 
+        // If the target cams are equal go to the next iteration of the loop
         if (targetLeftCam == targetRightCam)
           continue;
 
+        // If the target left cam and the current left cam aren't equal it will remove the symlink and remake it with the aproiate value
         if (targetLeftCam != currentLeftCam) {
           String cmd = "sudo link /dev/video" + (int) targetLeftCam * 2 + " /dev/leftCam";
           System.out.println(cmd);
@@ -329,6 +335,7 @@ public final class Main {
           currentLeftCam = (int) targetLeftCam;
         }
 
+        // If the target right cam and the current left right aren't equal it will remove the symlink and remake it with the aproiate value
         if (targetRightCam != currentRightCam) {
           String cmd = "sudo link /dev/video" + (int) targetRightCam * 2 + " /dev/rightCam";
           System.out.println(cmd);
@@ -337,6 +344,7 @@ public final class Main {
           currentRightCam = (int) targetRightCam;
         }
 
+        // Half a second delay
         Thread.sleep(500);
       } catch (InterruptedException ex) {
         return;
