@@ -314,38 +314,74 @@ public final class Main {
     // respective side
     int currentLeftCam = DEF_LEFT;
     int currentRightCam = DEF_RIGHT;
+
+    double targetLeftCam = DEF_LEFT;
+    double targetRightCam = DEF_RIGHT;
+
+    try {
+      Runtime.getRuntime().exec("sudo link /dev/video0 /dev/leftCam");
+
+      Runtime.getRuntime().exec("sudo link /dev/video2 /dev/rightCam");
+
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    final double FRONT_CAM = 2;
+    final double BACK_RIGHT_CAM = 0;
+    final double BACK_LEFT_CAM = 4;
+
     // loop forever
     for (;;) {
       try {
         // Pulls the data from shuffleboard if it can't find the value defualts to the
         // defualt value
-        double targetLeftCam = SmartDashboard.getNumber("Left Cam Value", DEF_LEFT);
-        double targetRightCam = SmartDashboard.getNumber("Right Cam Value", DEF_RIGHT);
+
+        double zone = SmartDashboard.getNumber("Robot Zone", 0);
+
+        int zoneInt = (int) zone;
+
+        switch (zoneInt) {
+          case 1:
+            targetRightCam = FRONT_CAM;
+            targetLeftCam = BACK_LEFT_CAM;
+            break;
+          case 2:
+            targetRightCam = BACK_RIGHT_CAM;
+            targetLeftCam = FRONT_CAM;
+            break;
+          case 3:
+            targetRightCam = BACK_LEFT_CAM;
+            targetLeftCam = BACK_RIGHT_CAM;
+        }
 
         // If the target cams are equal go to the next iteration of the loop
         if (targetLeftCam == targetRightCam)
           continue;
 
-        // If the target left cam and the current left cam aren't equal it will remove the symlink and remake it with the aproiate value
+        // If the target left cam and the current left cam aren't equal it will remove
+        // the symlink and remake it with the aproiate value
         if (targetLeftCam != currentLeftCam) {
-          String cmd = "sudo link /dev/video" + (int) targetLeftCam * 2 + " /dev/leftCam";
+          String cmd = "sudo link /dev/video" + (int) targetLeftCam + " /dev/leftCam";
           System.out.println(cmd);
           Runtime.getRuntime().exec("sudo rm /dev/leftCam");
           Runtime.getRuntime().exec(cmd);
           currentLeftCam = (int) targetLeftCam;
         }
 
-        // If the target right cam and the current left right aren't equal it will remove the symlink and remake it with the aproiate value
+        // If the target right cam and the current left right aren't equal it will
+        // remove the symlink and remake it with the aproiate value
         if (targetRightCam != currentRightCam) {
-          String cmd = "sudo link /dev/video" + (int) targetRightCam * 2 + " /dev/rightCam";
+          String cmd = "sudo link /dev/video" + (int) targetRightCam + " /dev/rightCam";
           System.out.println(cmd);
           Runtime.getRuntime().exec("sudo rm /dev/rightCam");
           Runtime.getRuntime().exec(cmd);
           currentRightCam = (int) targetRightCam;
         }
 
-        // Half a second delay
-        Thread.sleep(500);
+        // Fifth a second delay
+        Thread.sleep(200);
       } catch (InterruptedException ex) {
         return;
       } catch (IOException e) {
