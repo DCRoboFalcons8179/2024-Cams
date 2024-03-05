@@ -342,6 +342,10 @@ public final class Main {
 
         int zoneInt = (int) zone;
 
+        if(zone == 50) {
+          return;
+        }
+
         switch (zoneInt) {
           case 1:
             targetRightCam = FRONT_CAM;
