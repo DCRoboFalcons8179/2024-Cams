@@ -343,7 +343,8 @@ public final class Main {
         int zoneInt = (int) zone;
 
         if(zone == 50) {
-          return;
+          targetRightCam = 12;
+          targetLeftCam = 10;
         }
 
         switch (zoneInt) {
