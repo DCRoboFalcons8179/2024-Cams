@@ -1,7 +1,7 @@
 @if "%DEBUG%" == "" @echo off
 @rem ##########################################################################
 @rem
-@rem  2024-Cams startup script for Windows
+@rem  2024-cams startup script for Windows
 @rem
 @rem ##########################################################################
 
@@ -63,9 +63,9 @@ set CMD_LINE_ARGS=%*
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\2024-Cams-all.jar
+set CLASSPATH=%APP_HOME%\lib\2024-cams-all.jar
 
-@rem Execute 2024-Cams
+@rem Execute 2024-cams
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %2024_CAMS_OPTS%  -jar "%CLASSPATH%" %CMD_LINE_ARGS%
 
 :end

@@ -17,7 +17,7 @@
 @if "%DEBUG%"=="" @echo off
 @rem ##########################################################################
 @rem
-@rem  2024-Cams startup script for Windows
+@rem  2024-cams startup script for Windows
 @rem
 @rem ##########################################################################
 
@@ -67,10 +67,10 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\2024-Cams.jar;%APP_HOME%\lib\apriltag.jar;%APP_HOME%\lib\wpimath.jar;%APP_HOME%\lib\wpinet.jar;%APP_HOME%\lib\wpiutil.jar;%APP_HOME%\lib\ntcore.jar;%APP_HOME%\lib\cscore.jar;%APP_HOME%\lib\cameraserver.jar;%APP_HOME%\lib\opencv-460.jar;%APP_HOME%\lib\wpilibj.jar;%APP_HOME%\lib\wpiHal.jar;%APP_HOME%\lib\gson-2.8.5.jar
+set CLASSPATH=%APP_HOME%\lib\2024-cams.jar;%APP_HOME%\lib\apriltag.jar;%APP_HOME%\lib\wpimath.jar;%APP_HOME%\lib\wpinet.jar;%APP_HOME%\lib\wpiutil.jar;%APP_HOME%\lib\ntcore.jar;%APP_HOME%\lib\cscore.jar;%APP_HOME%\lib\cameraserver.jar;%APP_HOME%\lib\opencv-460.jar;%APP_HOME%\lib\wpilibj.jar;%APP_HOME%\lib\wpiHal.jar;%APP_HOME%\lib\gson-2.8.5.jar
 
 
-@rem Execute 2024-Cams
+@rem Execute 2024-cams
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %2024_CAMS_OPTS%  -classpath "%CLASSPATH%" Main %*
 
 :end

@@ -329,8 +329,10 @@ public final class Main {
     }
 
     final double FRONT_CAM = 2;
-    final double BACK_RIGHT_CAM = 0;
-    final double BACK_LEFT_CAM = 4;
+    // final double BACK_RIGHT_CAM = 0;
+    // final double BACK_LEFT_CAM = 4;
+    final double TOP_CAM = 0;
+    final double BOTTOM_CAM = 4;
 
     // loop forever
     for (;;) {
@@ -342,23 +344,24 @@ public final class Main {
 
         int zoneInt = (int) zone;
 
-        if(zone == 50) {
+        if (zoneInt == 50) {
           targetRightCam = 12;
           targetLeftCam = 10;
+        } else {
+          targetLeftCam = FRONT_CAM;
         }
 
         switch (zoneInt) {
           case 1:
-            targetRightCam = FRONT_CAM;
-            targetLeftCam = BACK_LEFT_CAM;
+            targetRightCam = TOP_CAM;
             break;
           case 2:
-            targetRightCam = BACK_RIGHT_CAM;
-            targetLeftCam = FRONT_CAM;
+            targetRightCam = BOTTOM_CAM;
             break;
-          case 3:
-            targetRightCam = BACK_LEFT_CAM;
-            targetLeftCam = BACK_RIGHT_CAM;
+          // case 3:
+          // targetRightCam = BACK_LEFT_CAM;
+          // targetLeftCam = BACK_RIGHT_CAM;
+          // break;
         }
 
         // If the target cams are equal go to the next iteration of the loop
